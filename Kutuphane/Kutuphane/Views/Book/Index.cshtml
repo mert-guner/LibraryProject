@@ -1,0 +1,202 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<main ng-controller="HomeController">
+    <div class="container">
+
+        <div style="display:flex;">
+            <div style="padding-right:3%;">
+                <div class="form-group">
+                    <label for="email">Başlangıç Tarihi:</label>
+                    <input type="date" class="form-control" id="datetimepicker1">
+                </div>
+            </div>
+            <div style="padding-right:3%;">
+                <div class="form-group">
+                    <label for="pwd">Bitiş Tarihi:</label>
+                    <input type="date" class="form-control" id="datetimepicker2">
+                </div>
+            </div>
+            <div style="padding-right:3%;">
+                <div class="form-group">
+                    <label for="pwd">Durumu:</label>
+                    <select class="form-select" id="txtStatus">
+                        <option value="-1">Tümü</option>
+                        <option value="1">Teslim Edildi</option>
+                        <option value="0">Teslim Edilmedi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="pwd">Arama:</label>
+            <input type="text" class="form-control" id="txtSearch">
+        </div>
+        <div class="form-group pt-2">
+            <a class="btn btn-primary" style="width:12%" ng-click="search()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Listele</span></a>
+        </div>
+        <div class="form-group pt-2" style="float:right;">
+            <a class="btn btn-success" style="color: white; font-weight: bold;" ng-click="ShowPopup()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Yeni</span></a>
+        </div>
+        <div class="form-group pt-2" style="float:right; padding-right:10px;">
+            <a class="btn btn-info" style="color: white; font-weight: bold;" href="/Report/Index"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Rapor</span></a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>TC</th>
+                    <th>Kitap Adı</th>
+                    <th>ISBN</th>
+                    <th>Alış Tarihi</th>
+                    <th>Teslim Tarihi</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in searchList">
+                    <th></th>
+                    <td>{{item.Name}}</td>
+                    <td>{{item.SurName}}</td>
+                    <td>{{item.TC}}</td>
+                    <td>{{item.BookName}}</td>
+                    <td>{{item.ISBN}}</td>
+                    <td>{{item.PurchaseDate | date:'dd.MM.yyyy'}}</td>
+                    <td>{{item.DeliveryDate | date:'dd.MM.yyyy'}}</td>
+                    <td><a class="btn btn-info" ng-click="UpdatePopUp(item.ID)" style="color:white; font-weight:bold;"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Güncelle</span></a></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+        <div class="modal" id="bookSavePopup" style="display: block; background: radial-gradient(black, transparent);">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="accordion-header">
+                        <h2 class="modal-title" style="padding-left:50px; padding-top:50px;">Yeni Kitap Ekle</h2>
+                    </div>
+                    <div style="padding:50px;">
+                        <form class="form-group">
+                            <div>
+                                <label>Ad</label>
+                                <input type="text" id="txtName" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>Soyad</label>
+                                <input type="text" id="txtSurname" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>TC</label>
+                                <input type="text" id="txtTC" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>Kitap Adı</label>
+                                <input type="text" id="txtBookName" class="form-control" required />
+                            </div>
+                            <div style="margin-top:20px;">
+                                <label>ISBN</label>
+                                <input type="text" id="txtISBN" class="form-control" required />
+                            </div>
+                            <div style="margin-top:20px;">
+                                <label>Alış Tarihi</label>
+                                <input type="date" id="datetimepicker3" class="form-control" />
+                            </div>
+
+                            <div style="margin-top:50px;">
+                                <a class="btn btn-success" ng-click="Save()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Kaydet</span></a>
+                                <a class="btn btn-danger" ng-click="HidePopup()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Vazgeç</span></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal" id="ModalUpdate" style="display: block; background: radial-gradient(black, transparent);">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="accordion-header">
+                        <h2 class="modal-title" style="padding-left:50px; padding-top:50px;">Güncelle</h2>
+                    </div>
+                    <div style="padding:50px;">
+                        <form class="form-group">
+                            <div>
+                                <label>Ad</label>
+                                <input type="text" id="txtUpdateName" ng-model="Name" data-slider-value="{{Name}}" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>Soyad</label>
+                                <input type="text" id="txtUpdateSurname" ng-model="SurName" data-slider-value="{{SurName}}" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>TC</label>
+                                <input type="text" id="txtUpdateTC" ng-model="TC" data-slider-value="{{TC}}" class="form-control" required />
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label>Kitap Adı</label>
+                                <input type="text" id="txtUpdateBookName" ng-model="BookName" data-slider-value="{{BookName}}" class="form-control" required />
+                            </div>
+                            <div style="margin-top:20px;">
+                                <label>ISBN</label>
+                                <input type="text" id="txtUpdateISBN" ng-model="ISBN" data-slider-value="{{ISBN}}" class="form-control" required />
+                            </div>
+                            <div style="margin-top:20px;">
+                                <label>Alış Tarihi</label>
+                                <input type="date" class="form-control" ng-model="PurchaseDate" data-slider-value="{{PurchaseDate}}" id="Updatedatetimepicker4">
+                            </div>
+
+                            <div style="margin-top:20px;">
+                                <label for="pwd">Durumu:</label>
+                                <select class="form-select" id="txtUpdateStatus" ng-model="Status">
+                                    <option value="0">Teslim Edilmedi</option>
+                                    <option value="1">Teslim Edildi</option>
+                                </select>
+                            </div>
+
+
+                            <div style="margin-top:50px;">
+                                <a class="btn btn-success" ng-click="Update()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Kaydet</span></a>
+                                <a class="btn btn-danger" ng-click="HideUpdatePopup()"><i class="fa fa-search" aria-hidden="true"></i><span class="hidden-xs"> Vazgeç</span></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</main>
+<script src="~/Scripts/Pages/home.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+
+<script src="~/Scripts/jszip.js" type="text/javascript"></script>
+<script src="~/Scripts/xlsx.full.min.js" type="text/javascript"></script>
+<script src="~/Scripts/FileSaver.js" type="text/javascript"></script>
+@*<script type="text/javascript">
+    $(function () {
+        var today = new Date();
+        $('#Updatedatetimepicker4').datetimepicker({
+            format: "DD/MM/YYYY",
+            defaultDate: "01/01/" + today.getFullYear(),
+            locale: "tr",
+        });
+
+    });
+</script>*@
+

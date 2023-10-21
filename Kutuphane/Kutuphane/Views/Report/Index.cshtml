@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+}
+
+<main ng-controller="ReportController" style="padding-top:10%">
+    <div class="container">
+
+        <h2 style="padding-bottom:2%">Kitap Raporu</h2>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Kitap Adı</th>
+                    <th>ISBN</th>
+                    <th>Zaman</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in reportList">
+                    <td></td>
+                    <td>{{item.BookNames}}</td>
+                    <td>{{item.ISBN}}</td>
+                    <td>{{item.Duration | number:2}} Saat</td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+</main>
+
+<script src="~/Scripts/Pages/Report.js"></script>
+
+
+
